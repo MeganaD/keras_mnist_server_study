@@ -60,7 +60,7 @@ def prepare_image(img):
         x, y, w, h = cv.boundingRect(cnt)
         
         # 면적이 작으면 윤곽에서 제외
-        if w * h < 50: continue 
+        if w * h < 10: continue 
         
         # 면적의 70%이상을 차지하면 윤곽에서 제외
         if w * h > im_w * res_h * 0.7: continue 

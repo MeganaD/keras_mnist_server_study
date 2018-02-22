@@ -1,28 +1,28 @@
 # -*- coding: utf-8 -*-
-
-from flask import Flask, request,jsonify
-from flask_restful import Resource, Api
-
 import numpy as np
 import cv2 as cv
 from keras.models import load_model
 from keras import backend as K
-
-app = Flask(__name__)
-api = Api(app)
+from flask import request,jsonify
+from flask_restful import Resource
 
 model = None
 
-def model_load():
-    global model 
-    model = load_model('model.h5')
-    model._make_predict_function()
-    print('-- Model Load Success. --')
-
 class Digit(Resource):
-    def __init__(self):
-        pass
+    img = None
+    def __init__(self, **kwargs):
+        global model
+        if model is None:
+            self.model_load()
+        if kwargs['request'].files.get("image"):
+            self.img = request.files['image'].read()
 
+    def model_load(self):
+        global model 
+        model = load_model('../model.h5')
+        model._make_predict_function()
+        print('-- Model Load Success. --')
+    
     def prepare_image(self, img):
         im = cv.imdecode(np.fromstring(img, np.uint8), cv.IMREAD_COLOR)
         img_rows, img_cols = 28, 28
@@ -74,18 +74,11 @@ class Digit(Resource):
     def post(self):
         data = {"success": False}
 
-        if request.files.get("image"):
-            img = request.files['image'].read()
-            npX = self.prepare_image(img)
+        if self.img is not None :
+            npX = self.prepare_image(self.img)
             results = model.predict_classes(np.array(npX))
             data["digits"] = results.tolist()
             data["number"] = int(''.join(str(n) for n in results ))
             data["success"] = True
 
         return jsonify(data)
-
-api.add_resource(Digit, '/digit')
-
-if __name__ == '__main__':
-    model_load()
-    app.run(debug=False)
