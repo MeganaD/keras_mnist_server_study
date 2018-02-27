@@ -26,7 +26,7 @@ class Digit(Resource):
     def prepare_image(self, img):
         im = cv.imdecode(np.fromstring(img, np.uint8), cv.IMREAD_COLOR)
         img_rows, img_cols = 28, 28
-        res_h = 30
+        res_h = 100
         im_h,im_w = im.shape[:2]
         
         r = res_h / float(im_h)
