@@ -33,7 +33,7 @@ class Digit(Resource):
         im_res = cv.resize(im,(int(im_w*r),int(im_h*r)), cv.INTER_AREA if r<1 else cv.INTER_LINEAR )
         gray = cv.cvtColor(im_res, cv.COLOR_BGR2GRAY)
 
-        im_proc = cv.GaussianBlur(gray, (3, 5), 0)
+        im_proc = cv.GaussianBlur(gray, (11, 17), 0)
         thresh = cv.threshold(im_proc, 120, 255, cv.THRESH_BINARY_INV)[1]
         contours = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)[1]
 

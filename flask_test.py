@@ -65,7 +65,7 @@ def prepare_image(img):
     
    
     # 블러 - 수직으로 좀더
-    im_proc = cv.GaussianBlur(gray, (3, 5), 0)
+    im_proc = cv.GaussianBlur(gray, (11, 17), 0)
     
     # 윤곽을 따기위해 반전, 하얀 배경에 쓴 글자를 인식하는 문제이므로 단순 2진화 사용
     thresh = cv.threshold(im_proc, 120, 255, cv.THRESH_BINARY_INV)[1]
