@@ -2,7 +2,10 @@ absl-py==0.1.10
 bleach==1.5.0
 certifi==2018.1.18
 click==6.7
+falcon==1.4.1
 Flask==0.12.2
+Flask-RESTful==0.3.6
+gunicorn==19.7.1
 h5py==2.7.1
 html5lib==0.9999999
 itsdangerous==0.24

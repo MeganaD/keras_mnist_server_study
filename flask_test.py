@@ -7,11 +7,6 @@ import cv2 as cv
 from keras.models import load_model
 from keras import backend as K
 
-# import io
-# import keras
-# from keras.models import load_model, model_from_yaml
-# from keras.preprocessing.image import img_to_array
-
 app = flask.Flask(__name__)
 model = None
 
