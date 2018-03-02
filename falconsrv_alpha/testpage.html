@@ -92,7 +92,7 @@ function predict() {
     var img = document.getElementById("myCanvas").toDataURL("image/jpeg");
     $.ajax({
         type: "POST",
-        url: '/digit',
+        url: 'http://127.0.0.1:5000/digit',
         data:{image: img},
         // dataType:"json",
         success: function(json){
