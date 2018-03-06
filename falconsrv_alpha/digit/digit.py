@@ -9,13 +9,38 @@ import json
 import cgi
 import re
 import base64
+import os
 
 model = None
 
 class Digit(object):
-    img = None
+    """Handwitten Digit Recognization Class """
+
+    rp = os.path.split(os.path.realpath(__file__))[0]
     
+    # 테스트 페이지
+    def on_get(self, req, resp):
+        """ get 요청시 시연용 기능 테스트 페이지로 처리 """
+        with open(os.path.join(self.rp,'testpage.html'), 'r') as f: 
+            resp.content_type = 'text/html'
+            resp.body = f.read()
+            resp.status = falcon.HTTP_200
+
     def on_post(self, req, resp):
+        """post request : 실제 숫자인식
+
+        Request Parameter
+        ----------
+        image : FILE or B64Encoded string
+            Digit image data
+
+        Returns
+        -------
+        json
+            success : boolean
+            number : recognized number, int
+            digits : recognized digit charicter array
+        """
         img = None
         data = {"success": False}
         form = cgi.FieldStorage(fp=req.stream, environ=req.env)
@@ -33,12 +58,15 @@ class Digit(object):
             npX = self.prepare_image(img)
             results = model.predict_classes(np.array(npX))
             data["digits"] = results.tolist()
-            data["number"] = int(''.join(str(n) for n in results ))
+            data["number"] = ''.join(str(n) for n in results )
             data["success"] = True
 
         resp.body = json.dumps(data, ensure_ascii=False)
         print(resp.body)
         resp.status = falcon.HTTP_200
+        resp.set_header('Access-Control-Allow-Origin', '*')
+        resp.set_header('Access-Control-Allow-Methods', 'POST')
+        resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
 
     def __init__(self):
         global model
@@ -47,7 +75,7 @@ class Digit(object):
 
     def model_load(self):
         global model 
-        model = load_model('model.h5')
+        model = load_model(os.path.join(self.rp,'model.h5'))
         model._make_predict_function()
         print('-- Model Load Success. --')
 
@@ -97,3 +125,4 @@ class Digit(object):
             npX = npX.reshape(npX.shape[0], img_rows, img_cols, 1)
 
         return npX
+
