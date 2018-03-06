@@ -1,5 +1,4 @@
-# ai.esls.io  
-JEI sls ML services.  
+# ML services.  
 
 using keras, tensorflow, falcon, gunicorn  
 main server : [/main/api.py](/main/api.py)
@@ -15,7 +14,7 @@ MNIST-based Handwritten Digit Recognition Service.
 | image | file or<br>string | digit image |
   
 test page (get) :  
-```http://ai.esls.io:5000/digit ```  
+```http://abcd:5000/digit ```  
   
 image file test :  
-``` curl -X POST -F image=@587.png 'http://ai.esls.io:5000/digit'```  
+``` curl -X POST -F image=@587.png 'http://abcd:5000/digit'```  
